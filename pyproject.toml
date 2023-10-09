@@ -1,0 +1,12 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "brag"
+requires-python = ">=3.11"
+version = "0.0.1"
+dependencies = ["fastapi", "openai", "pydantic-settings", "uvicorn", "gunicorn", "qdrant-client[fastembed]"]
+
+[project.optional-dependencies]
+dev = ["black", "ruff", "pytest"]

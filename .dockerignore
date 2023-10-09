@@ -1,0 +1,8 @@
+*.egg-info
+docs/static
+.venv
+*.pyc
+__pycache__
+terraform
+volumes
+data

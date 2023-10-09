@@ -1,0 +1,49 @@
+version: '3.8'
+services:
+
+  api:
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+    build:
+      context: .
+    depends_on:
+      database:
+        condition: service_healthy
+    restart: always
+    deploy:
+      replicas: 1
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/code/
+    command: ["bash", "-c","gunicorn -c settings/gunicorn.conf.py app.main:app"]
+    env_file:
+      - .env
+  dbmate:
+    image: amacneil/dbmate:latest
+    depends_on:
+      - database
+
+  database:
+    restart: always
+    image: postgres:15-alpine
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres  
+      POSTGRES_DB: postgres
+      # POSTGRES_PORT: 5432
+    env_file:
+      - .env
+
+volumes:
+  pg-data:
+    driver: local
