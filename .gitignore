@@ -94,3 +94,4 @@ cython_debug/
 # Ruff
 .ruff_cache/
 
+/local_cache/

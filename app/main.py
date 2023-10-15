@@ -1,9 +1,10 @@
 from fastapi import FastAPI
 
 from app import version
-from app.chat.api import router as chat_router
+from app.chats.api import router as chat_router
 from app.core.api import router as core_router
 from app.core.logs import logger
+
 # from app.core.middlewares import apply_middlewares
 
 app = FastAPI(version=version)

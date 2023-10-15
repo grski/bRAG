@@ -2,12 +2,13 @@ import openai
 from openai import ChatCompletion
 from starlette.responses import StreamingResponse
 
-from app.chat.constants import ChatRolesEnum, NO_DOCUMENTS_FOUND
-from app.chat.exceptions import RetrievalNoDocumentsFoundException
-from app.chat.models import BaseMessage, Message
-from app.chat.retrieval import process_retrieval
-from app.chat.streaming import stream_generator, format_to_event_stream
+from app.chats.constants import NO_DOCUMENTS_FOUND, ChatRolesEnum
+from app.chats.exceptions import RetrievalNoDocumentsFoundException
+from app.chats.models import BaseMessage, Message
+from app.chats.retrieval import process_retrieval
+from app.chats.streaming import format_to_event_stream, stream_generator
 from app.core.logs import logger
+from app.db import messages_queries
 from settings import settings
 
 
@@ -20,14 +21,18 @@ class OpenAIService:
             messages=[{"role": ChatRolesEnum.USER.value, "content": input_message.message}],
         )
         logger.info(f"Got the following response: {completion}")
-        return Message(
+        message = Message(
             model=input_message.model,
             message=cls.extract_response_from_completion(completion),
-            role=ChatRolesEnum.ASSISTANT.value
+            role=ChatRolesEnum.ASSISTANT.value,
         )
+        messages_queries.insert(model=message.model, message=message.message, role=message.role)
+        return message
 
     @staticmethod
-    async def chat_completion_with_streaming(input_message: BaseMessage) -> StreamingResponse:
+    async def chat_completion_with_streaming(
+        input_message: BaseMessage,
+    ) -> StreamingResponse:
         subscription: openai.ChatCompletion = await openai.ChatCompletion.acreate(
             model=input_message.model,
             api_key=settings.OPENAI_API_KEY,
@@ -46,7 +51,11 @@ class OpenAIService:
             augmented_message: BaseMessage = process_retrieval(message=input_message)
             return await cls.chat_completion_without_streaming(input_message=augmented_message)
         except RetrievalNoDocumentsFoundException:
-            return Message(model=input_message.model, message=NO_DOCUMENTS_FOUND, role=ChatRolesEnum.ASSISTANT.value)
+            return Message(
+                model=input_message.model,
+                message=NO_DOCUMENTS_FOUND,
+                role=ChatRolesEnum.ASSISTANT.value,
+            )
 
     @classmethod
     async def qa_with_stream(cls, input_message: BaseMessage) -> StreamingResponse:
@@ -54,4 +63,7 @@ class OpenAIService:
             augmented_message: BaseMessage = process_retrieval(message=input_message)
             return await cls.chat_completion_with_streaming(input_message=augmented_message)
         except RetrievalNoDocumentsFoundException:
-            return StreamingResponse((format_to_event_stream(y) for y in "Not found"), media_type="text/event-stream")
+            return StreamingResponse(
+                (format_to_event_stream(y) for y in "Not found"),
+                media_type="text/event-stream",
+            )

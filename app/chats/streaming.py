@@ -3,10 +3,14 @@ import json
 
 import async_timeout
 
-from app.chat.constants import ChatRolesEnum
-from app.chat.exceptions import OpenAIStreamTimeoutException, OpenAIFailedProcessingException
-from app.chat.models import Chunk, Message
+from app.chats.constants import ChatRolesEnum
+from app.chats.exceptions import (
+    OpenAIFailedProcessingException,
+    OpenAIStreamTimeoutException,
+)
+from app.chats.models import Chunk, Message
 from app.core.logs import logger
+from app.db import messages_queries
 from settings import settings
 
 
@@ -22,14 +26,19 @@ async def stream_generator(subscription):
                 # f-string is faster than concatenation so we use it here
                 complete_response = f"{complete_response}{Chunk.get_chunk_delta_content(chunk=chunk)}"
                 yield format_to_event_stream(post_processing(chunk))
-            message: Message = Message(model=chunk.model, message=complete_response, role=ChatRolesEnum.ASSISTANT.value)
+            message: Message = Message(
+                model=chunk.model,
+                message=complete_response,
+                role=ChatRolesEnum.ASSISTANT.value,
+            )
+            messages_queries.insert(model=message.model, message=message.message, role=message.role)
             logger.info(f"Complete Streamed Message: {message}")
         except asyncio.TimeoutError:
             raise OpenAIStreamTimeoutException
 
 
 def format_to_event_stream(data: str) -> str:
-    """ We format the event to a format more in line with the standard SSE format. """
+    """We format the event to a format more in line with the standard SSE format."""
     return f"event: message\ndata: {data}\n\n"
 
 

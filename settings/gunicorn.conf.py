@@ -13,6 +13,7 @@ def calculate_workers():
         return DEFAULT_NUMBER_OF_WORKERS_ON_LOCAL
 
     import multiprocessing
+
     # for cpus with two threads per core this is the recommended formula
     # we might want to adjust this for our use case and infrastructure in the future
     # as in general one vcpu in aws is not the same as one cpu core in a physical machine

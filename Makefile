@@ -16,7 +16,7 @@ pre-commit:
 
 test-without-clean:
 	set -o pipefail; \
-	poetry run pytest \
+	pytest \
 	  --color=yes \
 	  --junitxml=pytest.xml \
 	  --cov-report=term-missing:skip-covered \
@@ -27,6 +27,30 @@ test-without-clean:
 test:
 	make test-without-clean
 	make clean
+
+upgrade:
+	make pip-compile-upgrade
+	make pip-compile-dev-upgrade
+
+
+compile:
+	make pip-compile
+	make pip-compile-dev
+
+sync:
+	pip-sync requirements/requirements.txt
+sync-dev:
+	pip-sync requirements/requirements.txt requirements/requirements-dev.txt
+
+pip-compile:
+	pip-compile -o requirements/requirements.txt pyproject.toml
+pip-compile-dev:
+	pip-compile --extra dev -o requirements/requirements-dev.txt pyproject.toml
+
+pip-compile-upgrade:
+	pip-compile --strip-extras --upgrade -o requirements/requirements.txt pyproject.toml
+pip-compile-dev-upgrade:
+	pip-compile --extra dev --upgrade -o requirements/requirements-dev.txt pyproject.toml
 
 run:
 	python -m gunicorn -c settings/gunicorn.conf.py app.main:app

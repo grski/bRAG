@@ -1,17 +1,19 @@
 from pydantic import BaseModel, Field
 
-from app.chat.constants import ChatRolesEnum, ModelsEnum
-from app.chat.exceptions import OpenAIFailedProcessingException
+from app.chats.constants import ChatRolesEnum, ModelsEnum
+from app.chats.exceptions import OpenAIFailedProcessingException
 from app.core.models import TimestampAbstractModel
 
 
 class BaseMessage(BaseModel):
-    """ Base pydantic model that we use to interact with the API."""
+    """Base pydantic model that we use to interact with the API."""
+
     model: ModelsEnum = Field(default=ModelsEnum.GPT4.value)
     message: str
 
 
 class Message(TimestampAbstractModel, BaseMessage):
+    id: int = Field(default=None)
     role: ChatRolesEnum
 
 

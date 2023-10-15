@@ -6,7 +6,62 @@ build-backend = "hatchling.build"
 name = "brag"
 requires-python = ">=3.11"
 version = "0.0.1"
-dependencies = ["fastapi", "openai", "pydantic-settings", "uvicorn", "gunicorn", "qdrant-client[fastembed]"]
+dependencies = ["fastapi", "openai", "pydantic-settings", "uvicorn", "gunicorn", "qdrant-client[fastembed]", "sentry-sdk", "pugsql", "psycopg2-binary"]
 
 [project.optional-dependencies]
 dev = ["black", "ruff", "pytest"]
+
+[tool.black]
+line-length = 120
+target-version = ['py311']
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+  | migrations
+)/
+'''
+
+[tool.ruff]
+line-length = 120
+select = ["E", "F", "I"]
+fixable = ["A", "B", "C", "D", "E", "F", "I"]
+ignore = ["E712"]
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".hg",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "venv",
+    "*migrations*",
+]
+
+[tool.ruff.isort]
+section-order = ["fastapi", "future", "standard-library", "third-party",  "first-party", "local-folder"]
+
+[tool.ruff.isort.sections]
+fastapi = ["fastapi"]
