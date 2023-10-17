@@ -3,6 +3,9 @@ bRAG is an example repo how you can do Basic Retrieval Augmented Generation the 
 No langchain. No ORMs. No alembic/migration generation tools.
 Instead we go with PDF. What in the world? pugsql, dbmate & fastapi. That's it. 
 
+To better understand this project, you should read the following article:
+[Build your own LLM RAG API without langchain using OpenAI, qdrant and PDF stack](https://grski.pl/pdf-brag)
+
 More coming.
 
 Or to be more precise, we will use:
