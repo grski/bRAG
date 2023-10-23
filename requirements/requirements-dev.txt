@@ -19,7 +19,7 @@ async-timeout==4.0.3
     # via aiohttp
 attrs==23.1.0
     # via aiohttp
-black==23.9.1
+black==23.10.1
     # via brag (pyproject.toml)
 certifi==2023.7.22
     # via
@@ -27,7 +27,7 @@ certifi==2023.7.22
     #   httpx
     #   requests
     #   sentry-sdk
-charset-normalizer==3.3.0
+charset-normalizer==3.3.1
     # via
     #   aiohttp
     #   requests
@@ -36,17 +36,13 @@ click==8.1.7
     #   black
     #   uvicorn
 coloredlogs==15.0.1
-    # via
-    #   onnxruntime
-    #   onnxruntime-silicon
-fastapi==0.103.2
+    # via onnxruntime
+fastapi==0.104.0
     # via brag (pyproject.toml)
-fastembed==0.0.4
+fastembed==0.1.1
     # via qdrant-client
 flatbuffers==23.5.26
-    # via
-    #   onnxruntime
-    #   onnxruntime-silicon
+    # via onnxruntime
 frozenlist==1.4.0
     # via
     #   aiohttp
@@ -70,7 +66,9 @@ hpack==4.0.0
 httpcore==0.18.0
     # via httpx
 httpx[http2]==0.25.0
-    # via qdrant-client
+    # via
+    #   httpx
+    #   qdrant-client
 humanfriendly==10.0
     # via coloredlogs
 hyperframe==6.0.1
@@ -91,14 +89,14 @@ multidict==6.0.4
     #   yarl
 mypy-extensions==1.0.0
     # via black
-numpy==1.26.0
+numpy==1.26.1
     # via
+    #   onnx
     #   onnxruntime
-    #   onnxruntime-silicon
     #   qdrant-client
-onnxruntime==1.16.0
+onnx==1.14.1
     # via fastembed
-onnxruntime-silicon==1.16.0
+onnxruntime==1.16.1
     # via fastembed
 openai==0.28.1
     # via brag (pyproject.toml)
@@ -107,7 +105,6 @@ packaging==23.2
     #   black
     #   gunicorn
     #   onnxruntime
-    #   onnxruntime-silicon
     #   pytest
 pathspec==0.11.2
     # via black
@@ -120,8 +117,12 @@ portalocker==2.8.2
 protobuf==4.24.4
     # via
     #   grpcio-tools
+    #   onnx
     #   onnxruntime
-    #   onnxruntime-silicon
+psycopg2-binary==2.9.9
+    # via brag (pyproject.toml)
+pugsql==0.2.4
+    # via brag (pyproject.toml)
 pydantic==2.4.2
     # via
     #   fastapi
@@ -135,13 +136,13 @@ pytest==7.4.2
     # via brag (pyproject.toml)
 python-dotenv==1.0.0
     # via pydantic-settings
-qdrant-client[fastembed]==1.5.4
+qdrant-client[fastembed]==1.6.3
     # via brag (pyproject.toml)
 requests==2.31.0
     # via
     #   fastembed
     #   openai
-ruff==0.0.292
+ruff==0.1.1
     # via brag (pyproject.toml)
 sentry-sdk==1.32.0
     # via brag (pyproject.toml)
@@ -150,12 +151,12 @@ sniffio==1.3.0
     #   anyio
     #   httpcore
     #   httpx
+sqlalchemy==1.4.49
+    # via pugsql
 starlette==0.27.0
     # via fastapi
 sympy==1.12
-    # via
-    #   onnxruntime
-    #   onnxruntime-silicon
+    # via onnxruntime
 tokenizers==0.13.3
     # via fastembed
 tqdm==4.66.1
@@ -165,9 +166,10 @@ tqdm==4.66.1
 typing-extensions==4.8.0
     # via
     #   fastapi
+    #   onnx
     #   pydantic
     #   pydantic-core
-urllib3==1.26.17
+urllib3==1.26.18
     # via
     #   qdrant-client
     #   requests

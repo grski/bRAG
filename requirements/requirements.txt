@@ -25,7 +25,7 @@ certifi==2023.7.22
     #   httpx
     #   requests
     #   sentry-sdk
-charset-normalizer==3.3.0
+charset-normalizer==3.3.1
     # via
     #   aiohttp
     #   requests
@@ -33,7 +33,7 @@ click==8.1.7
     # via uvicorn
 coloredlogs==15.0.1
     # via onnxruntime
-fastapi==0.103.2
+fastapi==0.104.0
     # via brag (pyproject.toml)
 fastembed==0.1.1
     # via qdrant-client
@@ -149,7 +149,7 @@ typing-extensions==4.8.0
     #   onnx
     #   pydantic
     #   pydantic-core
-urllib3==1.26.17
+urllib3==1.26.18
     # via
     #   qdrant-client
     #   requests
