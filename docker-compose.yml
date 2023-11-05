@@ -29,6 +29,19 @@ services:
     env_file:
       - .env
 
+  worker:
+    build:
+      context: .
+    depends_on:
+      database:
+        condition: service_healthy
+    restart: always
+    volumes:
+      - .:/project/
+    command: [ "bash", "-c", "python -m faststream run --reload app.process.subscriber:app" ]
+    env_file:
+      - .env
+
   qdrant:
     restart: always
     image: qdrant/qdrant:latest

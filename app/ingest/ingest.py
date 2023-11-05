@@ -1,6 +1,7 @@
 import fnmatch
 import os
 import uuid
+from pathlib import Path
 
 from faststream.nats import NatsBroker
 
@@ -18,7 +19,7 @@ def find_md_files(directory):
     for root, _dirs, files in os.walk(directory):
         for filename in fnmatch.filter(files, "*.md"):
             # append full file path to our files list
-            md_files.append(os.path.join(root, filename))
+            md_files.append(Path(root) / Path(filename))
 
     return md_files
 
@@ -28,7 +29,7 @@ async def ingest_markdown():
     async with NatsBroker(settings.NATS_URI) as broker:
         md_files = find_md_files("data")
         for md_file in md_files:
-            with open(md_file, "r") as f:
+            with Path.open(md_file) as f:
                 ingested_file = TextIngestion(text=f.read(), run_uuid=run_uuid)
                 logger.info(f"Publishing review: {ingested_file.text[:50]}")
                 await publish_review(broker=broker, ingested_text=ingested_file)

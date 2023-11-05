@@ -18,7 +18,8 @@ Or to be more precise, we will use:
 6. migrations will be done using plain sql and [dbMate](https://github.com/mcfunley/pugsql).
 7. instead of poetry, we will go for [pyenv](https://github.com/pyenv/pyenv) + [pip-tools](https://github.com/jazzband/pip-tools)
 8. on the db front - [postgres](https://www.postgresql.org/)
-9. lastly, the app will be containerised - [docker](https://www.docker.com/)
+9. the app will be containerised - [docker](https://www.docker.com/)
+10. simple ingestion with [faststream](https://github.com/airtai/faststream) and [nats](https://nats.io/)
 
 Does that sound weird to you? Because it is! Even more fun.
 
@@ -31,10 +32,21 @@ docker-compose up
 
 ### local development for the api + db & vdb in docker
 ```bash
-docker-compose up -d database qdrant
+docker compose up -d database qdrant nats api worker
 make run-dev
 ```
 that's it. Then head over to http://localhost:8000/docs to see the swagger docs.
+
+To run the worker locally with faststream:
+o run the worker processing the reviews:
+```bash
+faststream run --reload app.process.subscriber:app
+```
+lastly to ingest:
+```bash
+python -m app.process.ingest
+```
+
 
 To get run-dev working proceed through the following steps:
 
