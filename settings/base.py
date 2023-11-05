@@ -12,13 +12,18 @@ class Settings(BaseSettings):
     OPENAI_API_KEY: str = Field(env="OPENAI_API_KEY", default="None")
     GENERATION_TIMEOUT_SEC: int = Field(env="GENERATION_TIMEOUT_SEC", default=120)
 
-    QDRANT_HOST: str = Field(env="QDRANT_HOST", default="qdrant")  # qdrant inside docker, localhost locally
+    QDRANT_HOST: str = Field(
+        env="QDRANT_HOST", default="qdrant"
+    )  # qdrant inside docker, localhost locally
     QDRANT_PORT: int = Field(env="QDRANT_PORT", default=6333)
     QDRANT_COLLECTION_NAME: str = Field(env="QDRANT_COLLECTION_NAME", default="demo")
 
+    NATS_URI: str = Field(env="NATS_URI", default="nats://localhost:4222/")
+    NATS_SUBJECT: str = Field(env="NATS_SUBJECT", default="ingestion")
+
     @property
     def is_local(self):
-        return self.ENVIRONMENT == Environments.LOCAL.value
+        return Environments.LOCAL.value == self.ENVIRONMENT
 
     class Config:
         env_file = ".env"

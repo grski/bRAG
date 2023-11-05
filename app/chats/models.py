@@ -43,5 +43,5 @@ class Chunk(BaseModel):
                     return chunk
                 case dict(chunk):
                     return chunk["choices"][0]["delta"].get("content", "")
-        except Exception:
-            raise OpenAIFailedProcessingException
+        except Exception as e:
+            raise OpenAIFailedProcessingException from e

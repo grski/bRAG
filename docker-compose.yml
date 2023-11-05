@@ -17,11 +17,30 @@ services:
     command: ["bash", "-c","dbmate up && gunicorn -c settings/gunicorn.conf.py app.main:app"]
     env_file:
       - .env
+  ingest:
+    build:
+      context: .
+    depends_on:
+      - nats
+    restart: always
+    volumes:
+      - .:/project/
+    command: [ "bash", "-c", "python -m app.ingest" ]
+    env_file:
+      - .env
+
   qdrant:
     restart: always
     image: qdrant/qdrant:latest
     ports:
       - "6333:6333"
+  nats:
+    image: nats
+    restart: always
+    ports:
+      - "4222:4222"
+      - "8222:8222"
+      - "6222:6222"
 
   database:
     restart: always

@@ -14,11 +14,15 @@ from settings import settings
 
 class OpenAIService:
     @classmethod
-    async def chat_completion_without_streaming(cls, input_message: BaseMessage) -> Message:
+    async def chat_completion_without_streaming(
+        cls, input_message: BaseMessage
+    ) -> Message:
         completion: openai.ChatCompletion = await openai.ChatCompletion.acreate(
             model=input_message.model,
             api_key=settings.OPENAI_API_KEY,
-            messages=[{"role": ChatRolesEnum.USER.value, "content": input_message.message}],
+            messages=[
+                {"role": ChatRolesEnum.USER.value, "content": input_message.message}
+            ],
         )
         logger.info(f"Got the following response: {completion}")
         message = Message(
@@ -26,7 +30,9 @@ class OpenAIService:
             message=cls.extract_response_from_completion(completion),
             role=ChatRolesEnum.ASSISTANT.value,
         )
-        messages_queries.insert(model=message.model, message=message.message, role=message.role)
+        messages_queries.insert(
+            model=message.model, message=message.message, role=message.role
+        )
         return message
 
     @staticmethod
@@ -36,10 +42,14 @@ class OpenAIService:
         subscription: openai.ChatCompletion = await openai.ChatCompletion.acreate(
             model=input_message.model,
             api_key=settings.OPENAI_API_KEY,
-            messages=[{"role": ChatRolesEnum.USER.value, "content": input_message.message}],
+            messages=[
+                {"role": ChatRolesEnum.USER.value, "content": input_message.message}
+            ],
             stream=True,
         )
-        return StreamingResponse(stream_generator(subscription), media_type="text/event-stream")
+        return StreamingResponse(
+            stream_generator(subscription), media_type="text/event-stream"
+        )
 
     @staticmethod
     def extract_response_from_completion(chat_completion: ChatCompletion) -> str:
@@ -49,7 +59,9 @@ class OpenAIService:
     async def qa_without_stream(cls, input_message: BaseMessage) -> Message:
         try:
             augmented_message: BaseMessage = process_retrieval(message=input_message)
-            return await cls.chat_completion_without_streaming(input_message=augmented_message)
+            return await cls.chat_completion_without_streaming(
+                input_message=augmented_message
+            )
         except RetrievalNoDocumentsFoundException:
             return Message(
                 model=input_message.model,
@@ -61,7 +73,9 @@ class OpenAIService:
     async def qa_with_stream(cls, input_message: BaseMessage) -> StreamingResponse:
         try:
             augmented_message: BaseMessage = process_retrieval(message=input_message)
-            return await cls.chat_completion_with_streaming(input_message=augmented_message)
+            return await cls.chat_completion_with_streaming(
+                input_message=augmented_message
+            )
         except RetrievalNoDocumentsFoundException:
             return StreamingResponse(
                 (format_to_event_stream(y) for y in "Not found"),

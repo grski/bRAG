@@ -24,17 +24,21 @@ async def stream_generator(subscription):
             complete_response: str = ""
             async for chunk in subscription:
                 # f-string is faster than concatenation so we use it here
-                complete_response = f"{complete_response}{Chunk.get_chunk_delta_content(chunk=chunk)}"
+                complete_response = (
+                    f"{complete_response}{Chunk.get_chunk_delta_content(chunk=chunk)}"
+                )
                 yield format_to_event_stream(post_processing(chunk))
             message: Message = Message(
                 model=chunk.model,
                 message=complete_response,
                 role=ChatRolesEnum.ASSISTANT.value,
             )
-            messages_queries.insert(model=message.model, message=message.message, role=message.role)
+            messages_queries.insert(
+                model=message.model, message=message.message, role=message.role
+            )
             logger.info(f"Complete Streamed Message: {message}")
-        except asyncio.TimeoutError:
-            raise OpenAIStreamTimeoutException
+        except asyncio.TimeoutError as e:
+            raise OpenAIStreamTimeoutException from e
 
 
 def format_to_event_stream(data: str) -> str:
@@ -48,5 +52,5 @@ def post_processing(chunk) -> str:
         formatted_chunk = Chunk.from_chunk(chunk=chunk)
         logger.info(f"Formatted Chunk: {formatted_chunk}")
         return json.dumps(formatted_chunk.model_dump())
-    except Exception:
-        raise OpenAIFailedProcessingException
+    except Exception as e:
+        raise OpenAIFailedProcessingException from e

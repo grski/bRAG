@@ -14,7 +14,8 @@ test_populate_vector_db(client=client)
 
 def process_retrieval(message: BaseMessage) -> BaseMessage:
     """Search for a given query using vector similarity search. If no documents are found we raise an exception.
-    If we do find documents we take the top 3 and put them into the context."""
+    If we do find documents we take the top 3 and put them into the context.
+    """
     search_result = search(query=message.message)
     resulting_query: str = (
         f"Answer based only on the context, nothing else. \n"
@@ -26,10 +27,13 @@ def process_retrieval(message: BaseMessage) -> BaseMessage:
 
 
 def search(query: str) -> str:
-    """This takes our query string, transforms the string into vectors and then searches for the most similar
+    """Function takes our query string, transforms the string into vectors and then searches for the most similar
     documents, returning the top 3. If no documents are found we raise an exception - as the user is asking
-    about something not in the context of our documents."""
-    search_result = client.query(collection_name=settings.QDRANT_COLLECTION_NAME, limit=3, query_text=query)
+    about something not in the context of our documents.
+    """
+    search_result = client.query(
+        collection_name=settings.QDRANT_COLLECTION_NAME, limit=3, query_text=query
+    )
     print(search_result)
     if not search_result:
         raise RetrievalNoDocumentsFoundException

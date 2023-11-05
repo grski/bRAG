@@ -31,4 +31,6 @@ class OpenAIStreamTimeoutException(HTTPException):
 
 class RetrievalNoDocumentsFoundException(HTTPException):
     def __init__(self):
-        super().__init__(status_code=status.HTTP_404_NOT_FOUND, detail=NO_DOCUMENTS_FOUND)
+        super().__init__(
+            status_code=status.HTTP_404_NOT_FOUND, detail=NO_DOCUMENTS_FOUND
+        )
