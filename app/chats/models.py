@@ -1,3 +1,5 @@
+from uuid import UUID, uuid4
+
 from pydantic import BaseModel, Field
 
 from app.chats.constants import ChatRolesEnum, ModelsEnum
@@ -14,6 +16,7 @@ class BaseMessage(BaseModel):
 
 class Message(TimestampAbstractModel, BaseMessage):
     id: int = Field(default=None)
+    uuid: UUID = Field(default_factory=uuid4)
     role: ChatRolesEnum
 
 
@@ -45,3 +48,15 @@ class Chunk(BaseModel):
                     return chunk["choices"][0]["delta"].get("content", "")
         except Exception as e:
             raise OpenAIFailedProcessingException from e
+
+
+class Chat(BaseModel):
+    """Simple model to tie together our local chat with the OpenAI thread. Later you could add user here."""
+
+    uuid: UUID = Field(default_factory=uuid4)
+    openai_id: str
+
+
+class Assistant(BaseModel):
+    uuid: UUID = Field(default_factory=uuid4)
+    openai_id: str

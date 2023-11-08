@@ -1,3 +1,3 @@
 -- :name insert :insert
-INSERT INTO message (model, role, message)
-VALUES (:model, :role, :message);
+INSERT INTO message (chat_uuid, model, role, message)
+VALUES (:chat_uuid, :model, :role, :message);
