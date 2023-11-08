@@ -4,23 +4,16 @@
 #
 #    pip-compile --extra=dev --output-file=requirements/requirements-dev.txt pyproject.toml
 #
-aiohttp==3.8.6
-    # via openai
-aiosignal==1.3.1
-    # via aiohttp
 annotated-types==0.6.0
     # via pydantic
 anyio==3.7.1
     # via
     #   fast-depends
     #   fastapi
-    #   httpcore
+    #   httpx
+    #   openai
     #   starlette
     #   watchfiles
-async-timeout==4.0.3
-    # via aiohttp
-attrs==23.1.0
-    # via aiohttp
 certifi==2023.7.22
     # via
     #   httpcore
@@ -29,10 +22,8 @@ certifi==2023.7.22
     #   sentry-sdk
 cfgv==3.4.0
     # via pre-commit
-charset-normalizer==3.3.1
-    # via
-    #   aiohttp
-    #   requests
+charset-normalizer==3.3.2
+    # via requests
 click==8.1.7
     # via
     #   typer
@@ -41,9 +32,11 @@ coloredlogs==15.0.1
     # via onnxruntime
 distlib==0.3.7
     # via virtualenv
+distro==1.8.0
+    # via openai
 fast-depends==2.2.1
     # via faststream
-fastapi==0.104.0
+fastapi==0.104.1
     # via brag (pyproject.toml)
 fastembed==0.1.1
     # via qdrant-client
@@ -53,15 +46,11 @@ filelock==3.13.1
     # via virtualenv
 flatbuffers==23.5.26
     # via onnxruntime
-frozenlist==1.4.0
-    # via
-    #   aiohttp
-    #   aiosignal
-grpcio==1.59.0
+grpcio==1.59.2
     # via
     #   grpcio-tools
     #   qdrant-client
-grpcio-tools==1.59.0
+grpcio-tools==1.59.2
     # via qdrant-client
 gunicorn==21.2.0
     # via brag (pyproject.toml)
@@ -73,11 +62,11 @@ h2==4.1.0
     # via httpx
 hpack==4.0.0
     # via h2
-httpcore==0.18.0
+httpcore==1.0.1
     # via httpx
-httpx[http2]==0.25.0
+httpx[http2]==0.25.1
     # via
-    #   httpx
+    #   openai
     #   qdrant-client
 humanfriendly==10.0
     # via coloredlogs
@@ -90,15 +79,10 @@ idna==3.4
     #   anyio
     #   httpx
     #   requests
-    #   yarl
 iniconfig==2.0.0
     # via pytest
 mpmath==1.3.0
     # via sympy
-multidict==6.0.4
-    # via
-    #   aiohttp
-    #   yarl
 nats-py==2.6.0
     # via faststream
 nodeenv==1.8.0
@@ -108,11 +92,11 @@ numpy==1.26.1
     #   onnx
     #   onnxruntime
     #   qdrant-client
-onnx==1.14.1
+onnx==1.15.0
     # via fastembed
 onnxruntime==1.16.1
     # via fastembed
-openai==0.28.1
+openai==1.1.1
     # via brag (pyproject.toml)
 packaging==23.2
     # via
@@ -127,7 +111,7 @@ portalocker==2.8.2
     # via qdrant-client
 pre-commit==3.5.0
     # via brag (pyproject.toml)
-protobuf==4.24.4
+protobuf==4.25.0
     # via
     #   grpcio-tools
     #   onnx
@@ -140,34 +124,32 @@ pydantic==2.4.2
     # via
     #   fast-depends
     #   fastapi
+    #   openai
     #   pydantic-settings
     #   qdrant-client
 pydantic-core==2.10.1
     # via pydantic
 pydantic-settings==2.0.3
     # via brag (pyproject.toml)
-pytest==7.4.2
+pytest==7.4.3
     # via brag (pyproject.toml)
 python-dotenv==1.0.0
     # via pydantic-settings
 pyyaml==6.0.1
     # via pre-commit
-qdrant-client[fastembed]==1.6.3
+qdrant-client[fastembed]==1.6.4
     # via brag (pyproject.toml)
 requests==2.31.0
-    # via
-    #   fastembed
-    #   openai
-ruff==0.1.1
+    # via fastembed
+ruff==0.1.4
     # via brag (pyproject.toml)
-sentry-sdk==1.32.0
+sentry-sdk==1.34.0
     # via brag (pyproject.toml)
 sniffio==1.3.0
     # via
     #   anyio
-    #   httpcore
     #   httpx
-sqlalchemy==1.4.49
+sqlalchemy==1.4.50
     # via pugsql
 starlette==0.27.0
     # via fastapi
@@ -184,7 +166,7 @@ typer==0.9.0
 typing-extensions==4.8.0
     # via
     #   fastapi
-    #   onnx
+    #   openai
     #   pydantic
     #   pydantic-core
     #   typer
@@ -193,7 +175,7 @@ urllib3==1.26.18
     #   qdrant-client
     #   requests
     #   sentry-sdk
-uvicorn==0.23.2
+uvicorn==0.24.0.post1
     # via brag (pyproject.toml)
 uvloop==0.19.0
     # via faststream
@@ -201,8 +183,6 @@ virtualenv==20.24.6
     # via pre-commit
 watchfiles==0.21.0
     # via faststream
-yarl==1.9.2
-    # via aiohttp
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools

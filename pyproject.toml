@@ -6,7 +6,7 @@ build-backend = "hatchling.build"
 name = "brag"
 requires-python = ">=3.11"
 version = "0.0.1"
-dependencies = ["fastapi", "openai", "pydantic-settings", "uvicorn", "gunicorn", "qdrant-client[fastembed]", "sentry-sdk", "pugsql", "psycopg2-binary", "faststream[nats]"]
+dependencies = ["fastapi", "openai", "pydantic-settings", "uvicorn", "gunicorn", "qdrant-client[fastembed]", "sentry-sdk", "pugsql", "psycopg2-binary", "faststream[nats]", "async-timeout"]
 
 [project.optional-dependencies]
 dev = ["pre-commit", "ruff", "pytest"]
